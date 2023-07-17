@@ -53,5 +53,9 @@ export class AbstractPitchMeasuredFromA4 {
 
         return `${pitchClass}${whichOctave}`;
     }
+
+    toMidiNoteNumberAssuming12TET() {
+        return 69 + 7 * this.numPerfectFifthsAbove + 12 * this.numOctaveAbove;
+    }
 }
 

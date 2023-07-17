@@ -46,5 +46,8 @@ class AbstractPitchMeasuredFromA4 {
         const whichOctave = octaveDueToPerfectFifths + this.numOctaveAbove;
         return `${pitchClass}${whichOctave}`;
     }
+    toMidiNoteNumberAssuming12TET() {
+        return 69 + 7 * this.numPerfectFifthsAbove + 12 * this.numOctaveAbove;
+    }
 }
 exports.AbstractPitchMeasuredFromA4 = AbstractPitchMeasuredFromA4;
