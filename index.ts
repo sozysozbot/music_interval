@@ -1,4 +1,4 @@
-export class AbstractPitchClassMeasuredFromA {
+export class PitchClassMeasuredFromA {
     readonly numP5Above: number;
     constructor(o: { numP5Above: number }) {
         this.numP5Above = o.numP5Above;
@@ -33,7 +33,7 @@ export class AbstractPitchClassMeasuredFromA {
     }
 }
 
-export class AbstractPitchMeasuredFromA4 {
+export class PitchMeasuredFromA4 {
     readonly numP5Above: number;
     readonly numOctaveAbove: number;
 
@@ -45,8 +45,8 @@ export class AbstractPitchMeasuredFromA4 {
         this.numP5Above = o.numP5Above;
     }
 
-    pitchClassAndOctaveNumber(): { pitchClass: AbstractPitchClassMeasuredFromA, octaveNumber: number } {
-        const pitchClass = new AbstractPitchClassMeasuredFromA({ numP5Above: this.numP5Above });
+    pitchClassAndOctaveNumber(): { pitchClass: PitchClassMeasuredFromA, octaveNumber: number } {
+        const pitchClass = new PitchClassMeasuredFromA({ numP5Above: this.numP5Above });
         const mod7 = ((this.numP5Above % 7) + 7) % 7;
         // now, we have to decide the octave
         // -11 | -10   -9   |  -8     -7 |  -6    -5 |  
@@ -72,7 +72,7 @@ export class AbstractPitchMeasuredFromA4 {
     }
 }
 
-export class AbstractIntervalIgnoringOctaves {
+export class IntervalIgnoringOctaves {
     readonly numP5Above: number;
 
     constructor(o: {
@@ -145,23 +145,23 @@ export class AbstractIntervalIgnoringOctaves {
     }
 
     toInverted() {
-        return new AbstractIntervalIgnoringOctaves({ numP5Above: -this.numP5Above });
+        return new IntervalIgnoringOctaves({ numP5Above: -this.numP5Above });
     }
 
-    above(pitchClass: AbstractPitchClassMeasuredFromA) {
-        return new AbstractPitchClassMeasuredFromA({
+    above(pitchClass: PitchClassMeasuredFromA) {
+        return new PitchClassMeasuredFromA({
             numP5Above: pitchClass.numP5Above + this.numP5Above
         });
     }
 
-    below(pitchClass: AbstractPitchClassMeasuredFromA) {
-        return new AbstractPitchClassMeasuredFromA({
+    below(pitchClass: PitchClassMeasuredFromA) {
+        return new PitchClassMeasuredFromA({
             numP5Above: pitchClass.numP5Above - this.numP5Above
         });
     }
 }
 
-export class AbstractSignedInterval {
+export class SignedInterval {
     readonly numP5Above: number;
     readonly numOctaveAbove: number;
 
@@ -174,28 +174,28 @@ export class AbstractSignedInterval {
     }
 
     toInverted() {
-        return new AbstractSignedInterval({
+        return new SignedInterval({
             numP5Above: -this.numP5Above,
             numOctaveAbove: -this.numOctaveAbove
         });
     }
 
-    above(pitch: AbstractPitchMeasuredFromA4) {
-        return new AbstractPitchMeasuredFromA4({
+    above(pitch: PitchMeasuredFromA4) {
+        return new PitchMeasuredFromA4({
             numP5Above: pitch.numP5Above + this.numP5Above,
             numOctaveAbove: pitch.numOctaveAbove + this.numOctaveAbove,
         });
     }
 
-    below(pitch: AbstractPitchMeasuredFromA4) {
-        return new AbstractPitchMeasuredFromA4({
+    below(pitch: PitchMeasuredFromA4) {
+        return new PitchMeasuredFromA4({
             numP5Above: pitch.numP5Above - this.numP5Above,
             numOctaveAbove: pitch.numOctaveAbove - this.numOctaveAbove,
         });
     }
 
     toJapanese() {
-        const c0 = new AbstractPitchMeasuredFromA4({
+        const c0 = new PitchMeasuredFromA4({
             numP5Above: -3,
             numOctaveAbove: -3
         });
@@ -213,14 +213,14 @@ export class AbstractSignedInterval {
         if (octaveNumber > 0 ||
             (octaveNumber === 0 && !isCFlatOrBelow)
         ) {
-            const { quality, degree } = new AbstractIntervalIgnoringOctaves({ numP5Above: this.numP5Above }).toJapanese2();
+            const { quality, degree } = new IntervalIgnoringOctaves({ numP5Above: this.numP5Above }).toJapanese2();
             const full_degree = degree + octaveNumber * 7;
             return `${quality}${full_degree}度上`;
         } else {
             //「下」
             const pitch = this.below(c0);
             const { octaveNumber } = pitch.pitchClassAndOctaveNumber();
-            const { quality, degree } = new AbstractIntervalIgnoringOctaves({ numP5Above: -this.numP5Above }).toJapanese2();
+            const { quality, degree } = new IntervalIgnoringOctaves({ numP5Above: -this.numP5Above }).toJapanese2();
             const full_degree = degree + octaveNumber * 7;
             return `${quality}${full_degree}度下`;
         }
