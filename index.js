@@ -1,4 +1,6 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AbstractPitchMeasuredFromA4 = void 0;
 class AbstractPitchMeasuredFromA4 {
     numPerfectFifthsAbove;
     numOctaveAbove;
@@ -45,3 +47,4 @@ class AbstractPitchMeasuredFromA4 {
         return `${pitchClass}${whichOctave}`;
     }
 }
+exports.AbstractPitchMeasuredFromA4 = AbstractPitchMeasuredFromA4;

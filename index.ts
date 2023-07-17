@@ -1,4 +1,4 @@
-class AbstractPitchMeasuredFromA4 {
+export class AbstractPitchMeasuredFromA4 {
     readonly numPerfectFifthsAbove: number;
     readonly numOctaveAbove: number;
 
