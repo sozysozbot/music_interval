@@ -2,6 +2,7 @@ import {
     AbstractPitchClassMeasuredFromA,
     AbstractPitchMeasuredFromA4,
     AbstractIntervalIgnoringOctaves,
+    AbstractSignedInterval,
 } from "./index";
 
 test('AbstractPitchMeasuredFromA4.toAsciiString', () => {
@@ -34,6 +35,11 @@ test('AbstractPitchMeasuredFromA4.toAsciiString', () => {
         numP5Above: -5,
         numOctaveAbove: 0
     }).toAsciiString({ collapseSharps: false })).toBe('Bb1');
+
+    expect(new AbstractPitchMeasuredFromA4({
+        numP5Above: -3,
+        numOctaveAbove: -3
+    }).toAsciiString({ collapseSharps: false })).toBe('C0');
 });
 
 test('AbstractPitchMeasuredFromA4.toMidiNoteNumberAssuming12TET', () => {
@@ -126,4 +132,56 @@ test('AbstractIntervalIgnoringOctaves.{above, below}', () => {
 
     expect(major2nd.above(fSharp).toAsciiString({ collapseSharps: false })).toBe('G#');
     expect(major2nd.below(fSharp).toAsciiString({ collapseSharps: false })).toBe('E');
+});
+
+test('AbstractSignedInterval', () => {
+    expect(new AbstractSignedInterval({
+        numP5Above: 0,
+        numOctaveAbove: 0,
+    }).toJapanese()).toBe('完全1度');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: 0,
+        numOctaveAbove: 1,
+    }).toJapanese()).toBe('完全8度上');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: 0,
+        numOctaveAbove: -1,
+    }).toJapanese()).toBe('完全8度下');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: 2,
+        numOctaveAbove: -1,
+    }).toJapanese()).toBe('長2度上');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: -2,
+        numOctaveAbove: 1,
+    }).toJapanese()).toBe('長2度下');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: -4,
+        numOctaveAbove: 3
+    }).toJapanese()).toBe('短6度上');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: 7,
+        numOctaveAbove: -4
+    }).toJapanese()).toBe('増1度上');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: -9,
+        numOctaveAbove: 6
+    }).toJapanese()).toBe('減7度上');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: 13, 
+        numOctaveAbove: -7
+    }).toJapanese()).toBe('重増4度上');
+
+    expect(new AbstractSignedInterval({
+        numP5Above: 13,
+        numOctaveAbove: -8
+    }).toJapanese()).toBe('重減5度下');
 });
