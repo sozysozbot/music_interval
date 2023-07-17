@@ -128,5 +128,8 @@ class AbstractIntervalIgnoringOctaves {
         })();
         return `${quality}${degree}度`;
     }
+    toInverted() {
+        return new AbstractIntervalIgnoringOctaves({ numPerfectFifthsAbove: -this.numPerfectFifthsAbove });
+    }
 }
 exports.AbstractIntervalIgnoringOctaves = AbstractIntervalIgnoringOctaves;

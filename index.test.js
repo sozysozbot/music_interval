@@ -80,3 +80,10 @@ test('AbstractIntervalIgnoringOctaves.toJapanese', () => {
         numPerfectFifthsAbove: -13,
     }).toJapanese()).toBe('重減5度');
 });
+test('AbstractIntervalIgnoringOctaves.toInverted', () => {
+    const major2nd = new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: 2,
+    });
+    expect(major2nd.toJapanese()).toBe('長2度');
+    expect(major2nd.toInverted().toJapanese()).toBe('短7度');
+});
