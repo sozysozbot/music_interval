@@ -67,3 +67,70 @@ export class AbstractPitchMeasuredFromA4 {
     }
 }
 
+export class AbstractIntervalIgnoringOctaves {
+    readonly numPerfectFifthsAbove: number;
+
+    constructor(o: {
+        numPerfectFifthsAbove: number,
+    }) {
+        this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
+    }
+
+    //-12 Dbb 減2度
+    //-11 Abb 減6度
+    //-10 Ebb 減3度
+    // -9 Bbb 減7度
+    // -8 Fb  減4度
+    // -7 Cb  減1度
+    // -6 Gb  減5度
+    //============
+    // -5 Db  短2度
+    // -4 Ab  短6度
+    // -3 Eb  短3度
+    // -2 Bb  短7度
+    //============
+    // -1 F   完全4度
+    //  0 C   完全1度
+    //  1 G   完全5度
+    //============
+    //  2 D   長2度
+    //  3 A   長6度
+    //  4 E   長3度
+    //  5 B   長7度
+    //============
+    //  6 F#  増4度
+    //  7 C#  増1度
+    //  8 G#  増5度
+    //  9 D#  増2度
+    // 10 A#  増6度
+    // 11 E#  増3度
+    // 12 B#  増7度
+    //============
+    // 13 Fx  重増4度
+    // 14 Cx  重増1度
+    // 15 Gx  重増5度
+    // 16 Dx  重増2度
+    // 17 Ax  重増6度
+    // 18 Ex  重増3度
+    // 19 Bx  重増7度
+    toJapanese() {
+        const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
+        const degree = [1, 5, 2, 6, 3, 7, 4][mod7];
+        const quality: string = (() => {
+            const abs = Math.abs(this.numPerfectFifthsAbove);
+            if (abs <= 1) {
+                return "完全";
+            } else if (abs <= 5) {
+                return this.numPerfectFifthsAbove > 0 ? "長" : "短";
+            } else if (abs <= 12) {
+                return this.numPerfectFifthsAbove > 0 ? "増" : "減";
+            } else {
+                //13 - 19: 重増 / 重減
+                //20 - 26: 重々増 / 重々減
+                //27 - 33: 重々々増 / 重々々減
+                return `重${"々".repeat(Math.floor((abs - 13) / 7))}${this.numPerfectFifthsAbove > 0 ? "増" : "減"}`;
+            }
+        })();
+        return `${quality}${degree}度`;
+    }
+}

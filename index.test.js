@@ -57,3 +57,26 @@ test('AbstractPitchClassMeasuredFromA.toAsciiString', () => {
         numPerfectFifthsAbove: -5,
     }).toAsciiString({ collapseSharps: false })).toBe('Bb');
 });
+test('AbstractIntervalIgnoringOctaves.toJapanese', () => {
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: 0,
+    }).toJapanese()).toBe('完全1度');
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: 2,
+    }).toJapanese()).toBe('長2度');
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: -4,
+    }).toJapanese()).toBe('短6度');
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: 7,
+    }).toJapanese()).toBe('増1度');
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: -9,
+    }).toJapanese()).toBe('減7度');
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: 13,
+    }).toJapanese()).toBe('重増4度');
+    expect(new index_1.AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: -13,
+    }).toJapanese()).toBe('重減5度');
+});
