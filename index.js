@@ -1,11 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AbstractPitchMeasuredFromA4 = void 0;
-class AbstractPitchMeasuredFromA4 {
+exports.AbstractPitchMeasuredFromA4 = exports.AbstractPitchClassMeasuredFromA = void 0;
+class AbstractPitchClassMeasuredFromA {
     numPerfectFifthsAbove;
-    numOctaveAbove;
     constructor(o) {
-        this.numOctaveAbove = o.numOctaveAbove;
         this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
     }
     toAsciiString(config) {
@@ -33,6 +31,20 @@ class AbstractPitchMeasuredFromA4 {
             return "#".repeat(numberOfSharps);
         })();
         const pitchClass = `${baseNote}${accidentals}`;
+        return pitchClass;
+    }
+}
+exports.AbstractPitchClassMeasuredFromA = AbstractPitchClassMeasuredFromA;
+class AbstractPitchMeasuredFromA4 {
+    numPerfectFifthsAbove;
+    numOctaveAbove;
+    constructor(o) {
+        this.numOctaveAbove = o.numOctaveAbove;
+        this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
+    }
+    toAsciiString(config) {
+        const pitchClass = new AbstractPitchClassMeasuredFromA({ numPerfectFifthsAbove: this.numPerfectFifthsAbove }).toAsciiString(config);
+        const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
         // now, we have to decide the octave
         // -11 | -10   -9   |  -8     -7 |  -6    -5 |  
         // Fb-2   Cb-1  Gb-1    Db0    Ab0   Eb1    Bb1 

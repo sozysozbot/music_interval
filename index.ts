@@ -1,12 +1,6 @@
-export class AbstractPitchMeasuredFromA4 {
+export class AbstractPitchClassMeasuredFromA {
     readonly numPerfectFifthsAbove: number;
-    readonly numOctaveAbove: number;
-
-    constructor(o: {
-        numPerfectFifthsAbove: number,
-        numOctaveAbove: number
-    }) {
-        this.numOctaveAbove = o.numOctaveAbove;
+    constructor(o: { numPerfectFifthsAbove: number }) {
         this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
     }
 
@@ -22,7 +16,6 @@ export class AbstractPitchMeasuredFromA4 {
         // 
         //  3  4  5  6  7  8  9
         // F# C# G# D# A# E# B#
-
         const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
         const baseNote = "AEBFCGD"[mod7];
         const numberOfSharps = Math.floor((this.numPerfectFifthsAbove + 4) / 7);
@@ -35,9 +28,26 @@ export class AbstractPitchMeasuredFromA4 {
             }
             return "#".repeat(numberOfSharps);
         })();
-
         const pitchClass: string = `${baseNote}${accidentals}`;
+        return pitchClass;
+    }
+}
 
+export class AbstractPitchMeasuredFromA4 {
+    readonly numPerfectFifthsAbove: number;
+    readonly numOctaveAbove: number;
+
+    constructor(o: {
+        numPerfectFifthsAbove: number,
+        numOctaveAbove: number
+    }) {
+        this.numOctaveAbove = o.numOctaveAbove;
+        this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
+    }
+
+    toAsciiString(config: { collapseSharps: boolean }): string {
+        const pitchClass: string = new AbstractPitchClassMeasuredFromA({ numPerfectFifthsAbove: this.numPerfectFifthsAbove }).toAsciiString(config);
+        const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
         // now, we have to decide the octave
         // -11 | -10   -9   |  -8     -7 |  -6    -5 |  
         // Fb-2   Cb-1  Gb-1    Db0    Ab0   Eb1    Bb1 
@@ -48,9 +58,7 @@ export class AbstractPitchMeasuredFromA4 {
         //   3 |   4     5 |   6      7 |   8      9
         // F#6    C#7   G#7   D#8    A#8   E#9    B#9
         const octaveDueToPerfectFifths = [4, 5, 5, 6, 7, 7, 8][mod7] + Math.floor(this.numPerfectFifthsAbove / 7) * 4;
-
         const whichOctave = octaveDueToPerfectFifths + this.numOctaveAbove;
-
         return `${pitchClass}${whichOctave}`;
     }
 

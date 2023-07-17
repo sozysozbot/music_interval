@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("./index");
-test('toAsciiString', () => {
+test('AbstractPitchMeasuredFromA4.toAsciiString', () => {
     expect(new index_1.AbstractPitchMeasuredFromA4({
         numPerfectFifthsAbove: 0,
         numOctaveAbove: 0
@@ -27,7 +27,7 @@ test('toAsciiString', () => {
         numOctaveAbove: 0
     }).toAsciiString({ collapseSharps: false })).toBe('Bb1');
 });
-test('toMidiNoteNumberAssuming12TET', () => {
+test('AbstractPitchMeasuredFromA4.toMidiNoteNumberAssuming12TET', () => {
     expect(new index_1.AbstractPitchMeasuredFromA4({
         numPerfectFifthsAbove: 0,
         numOctaveAbove: 0
@@ -36,4 +36,24 @@ test('toMidiNoteNumberAssuming12TET', () => {
         numPerfectFifthsAbove: 10,
         numOctaveAbove: -5
     }).toMidiNoteNumberAssuming12TET()).toBe(79);
+});
+test('AbstractPitchClassMeasuredFromA.toAsciiString', () => {
+    expect(new index_1.AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: 0,
+    }).toAsciiString({ collapseSharps: false })).toBe('A');
+    expect(new index_1.AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: 3,
+    }).toAsciiString({ collapseSharps: false })).toBe('F#');
+    expect(new index_1.AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: 3
+    }).toAsciiString({ collapseSharps: false })).toBe('F#');
+    expect(new index_1.AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: 10,
+    }).toAsciiString({ collapseSharps: false })).toBe('F##');
+    expect(new index_1.AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: 10,
+    }).toAsciiString({ collapseSharps: true })).toBe('Fx');
+    expect(new index_1.AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: -5,
+    }).toAsciiString({ collapseSharps: false })).toBe('Bb');
 });
