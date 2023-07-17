@@ -112,3 +112,18 @@ test('AbstractIntervalIgnoringOctaves.toInverted', () => {
     expect(major2nd.toJapanese()).toBe('長2度');
     expect(major2nd.toInverted().toJapanese()).toBe('短7度');
 });
+
+test('AbstractIntervalIgnoringOctaves.{above, below}', () => {
+    const major2nd = new AbstractIntervalIgnoringOctaves({
+        numPerfectFifthsAbove: 2,
+    });
+    expect(major2nd.toJapanese()).toBe('長2度');
+
+    const fSharp = new AbstractPitchClassMeasuredFromA({
+        numPerfectFifthsAbove: 3,
+    });
+    expect(fSharp.toAsciiString({ collapseSharps: false })).toBe('F#');
+
+    expect(major2nd.above(fSharp).toAsciiString({ collapseSharps: false })).toBe('G#');
+    expect(major2nd.below(fSharp).toAsciiString({ collapseSharps: false })).toBe('E');
+});

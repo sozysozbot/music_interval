@@ -131,5 +131,15 @@ class AbstractIntervalIgnoringOctaves {
     toInverted() {
         return new AbstractIntervalIgnoringOctaves({ numPerfectFifthsAbove: -this.numPerfectFifthsAbove });
     }
+    above(pitchClass) {
+        return new AbstractPitchClassMeasuredFromA({
+            numPerfectFifthsAbove: pitchClass.numPerfectFifthsAbove + this.numPerfectFifthsAbove
+        });
+    }
+    below(pitchClass) {
+        return new AbstractPitchClassMeasuredFromA({
+            numPerfectFifthsAbove: pitchClass.numPerfectFifthsAbove - this.numPerfectFifthsAbove
+        });
+    }
 }
 exports.AbstractIntervalIgnoringOctaves = AbstractIntervalIgnoringOctaves;

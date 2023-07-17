@@ -137,4 +137,16 @@ export class AbstractIntervalIgnoringOctaves {
     toInverted() {
         return new AbstractIntervalIgnoringOctaves({ numPerfectFifthsAbove: -this.numPerfectFifthsAbove });
     }
+
+    above(pitchClass: AbstractPitchClassMeasuredFromA) {
+        return new AbstractPitchClassMeasuredFromA({
+            numPerfectFifthsAbove: pitchClass.numPerfectFifthsAbove + this.numPerfectFifthsAbove
+        });
+    }
+
+    below(pitchClass: AbstractPitchClassMeasuredFromA) {
+        return new AbstractPitchClassMeasuredFromA({
+            numPerfectFifthsAbove: pitchClass.numPerfectFifthsAbove - this.numPerfectFifthsAbove
+        });
+    }
 }
