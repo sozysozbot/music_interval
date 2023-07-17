@@ -2,13 +2,13 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AbstractIntervalIgnoringOctaves = exports.AbstractPitchMeasuredFromA4 = exports.AbstractPitchClassMeasuredFromA = void 0;
 class AbstractPitchClassMeasuredFromA {
-    numPerfectFifthsAbove;
+    numP5Above;
     constructor(o) {
-        this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
+        this.numP5Above = o.numP5Above;
     }
     toAsciiString(config) {
         // First, we have to decide the pitch class
-        // Depending on numPerfectFifthsAbove, 
+        // Depending on numP5Above, 
         //
         //       -9 -8 -7 -6 -5
         // Fb Cb Gb Db Ab Eb Bb
@@ -18,9 +18,9 @@ class AbstractPitchClassMeasuredFromA {
         // 
         //  3  4  5  6  7  8  9
         // F# C# G# D# A# E# B#
-        const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
+        const mod7 = ((this.numP5Above % 7) + 7) % 7;
         const baseNote = "AEBFCGD"[mod7];
-        const numberOfSharps = Math.floor((this.numPerfectFifthsAbove + 4) / 7);
+        const numberOfSharps = Math.floor((this.numP5Above + 4) / 7);
         const accidentals = (() => {
             if (numberOfSharps <= 0) {
                 return "b".repeat(-numberOfSharps);
@@ -36,15 +36,15 @@ class AbstractPitchClassMeasuredFromA {
 }
 exports.AbstractPitchClassMeasuredFromA = AbstractPitchClassMeasuredFromA;
 class AbstractPitchMeasuredFromA4 {
-    numPerfectFifthsAbove;
+    numP5Above;
     numOctaveAbove;
     constructor(o) {
         this.numOctaveAbove = o.numOctaveAbove;
-        this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
+        this.numP5Above = o.numP5Above;
     }
     toAsciiString(config) {
-        const pitchClass = new AbstractPitchClassMeasuredFromA({ numPerfectFifthsAbove: this.numPerfectFifthsAbove }).toAsciiString(config);
-        const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
+        const pitchClass = new AbstractPitchClassMeasuredFromA({ numP5Above: this.numP5Above }).toAsciiString(config);
+        const mod7 = ((this.numP5Above % 7) + 7) % 7;
         // now, we have to decide the octave
         // -11 | -10   -9   |  -8     -7 |  -6    -5 |  
         // Fb-2   Cb-1  Gb-1    Db0    Ab0   Eb1    Bb1 
@@ -54,19 +54,19 @@ class AbstractPitchMeasuredFromA4 {
         //
         //   3 |   4     5 |   6      7 |   8      9
         // F#6    C#7   G#7   D#8    A#8   E#9    B#9
-        const octaveDueToPerfectFifths = [4, 5, 5, 6, 7, 7, 8][mod7] + Math.floor(this.numPerfectFifthsAbove / 7) * 4;
+        const octaveDueToPerfectFifths = [4, 5, 5, 6, 7, 7, 8][mod7] + Math.floor(this.numP5Above / 7) * 4;
         const whichOctave = octaveDueToPerfectFifths + this.numOctaveAbove;
         return `${pitchClass}${whichOctave}`;
     }
     toMidiNoteNumberAssuming12TET() {
-        return 69 + 7 * this.numPerfectFifthsAbove + 12 * this.numOctaveAbove;
+        return 69 + 7 * this.numP5Above + 12 * this.numOctaveAbove;
     }
 }
 exports.AbstractPitchMeasuredFromA4 = AbstractPitchMeasuredFromA4;
 class AbstractIntervalIgnoringOctaves {
-    numPerfectFifthsAbove;
+    numP5Above;
     constructor(o) {
-        this.numPerfectFifthsAbove = o.numPerfectFifthsAbove;
+        this.numP5Above = o.numP5Above;
     }
     //-12 Dbb 減2度
     //-11 Abb 減6度
@@ -106,39 +106,39 @@ class AbstractIntervalIgnoringOctaves {
     // 18 Ex  重増3度
     // 19 Bx  重増7度
     toJapanese() {
-        const mod7 = ((this.numPerfectFifthsAbove % 7) + 7) % 7;
+        const mod7 = ((this.numP5Above % 7) + 7) % 7;
         const degree = [1, 5, 2, 6, 3, 7, 4][mod7];
         const quality = (() => {
-            const abs = Math.abs(this.numPerfectFifthsAbove);
+            const abs = Math.abs(this.numP5Above);
             if (abs <= 1) {
                 return "完全";
             }
             else if (abs <= 5) {
-                return this.numPerfectFifthsAbove > 0 ? "長" : "短";
+                return this.numP5Above > 0 ? "長" : "短";
             }
             else if (abs <= 12) {
-                return this.numPerfectFifthsAbove > 0 ? "増" : "減";
+                return this.numP5Above > 0 ? "増" : "減";
             }
             else {
                 //13 - 19: 重増 / 重減
                 //20 - 26: 重々増 / 重々減
                 //27 - 33: 重々々増 / 重々々減
-                return `重${"々".repeat(Math.floor((abs - 13) / 7))}${this.numPerfectFifthsAbove > 0 ? "増" : "減"}`;
+                return `重${"々".repeat(Math.floor((abs - 13) / 7))}${this.numP5Above > 0 ? "増" : "減"}`;
             }
         })();
         return `${quality}${degree}度`;
     }
     toInverted() {
-        return new AbstractIntervalIgnoringOctaves({ numPerfectFifthsAbove: -this.numPerfectFifthsAbove });
+        return new AbstractIntervalIgnoringOctaves({ numP5Above: -this.numP5Above });
     }
     above(pitchClass) {
         return new AbstractPitchClassMeasuredFromA({
-            numPerfectFifthsAbove: pitchClass.numPerfectFifthsAbove + this.numPerfectFifthsAbove
+            numP5Above: pitchClass.numP5Above + this.numP5Above
         });
     }
     below(pitchClass) {
         return new AbstractPitchClassMeasuredFromA({
-            numPerfectFifthsAbove: pitchClass.numPerfectFifthsAbove - this.numPerfectFifthsAbove
+            numP5Above: pitchClass.numP5Above - this.numP5Above
         });
     }
 }
